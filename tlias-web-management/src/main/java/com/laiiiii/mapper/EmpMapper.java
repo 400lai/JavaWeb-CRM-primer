@@ -2,13 +2,11 @@ package com.laiiiii.mapper;
 
 import com.laiiiii.domain.Emp;
 import com.laiiiii.domain.EmpQueryParam;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 员工信息
@@ -53,4 +51,30 @@ public interface EmpMapper {
     void insert(Emp emp);
 
 
+    /**
+     * 根据ID批量删除员工的基本信息
+     */
+    void deleteByIds(List<Integer> ids);
+
+    /**
+     * 根据ID查询员工信息以及工作经历信息
+     */
+    Emp getById(Integer id);
+
+     /**
+     * 根据ID更新员工基本信息
+     */
+    void updateById(Emp emp);
+
+    /**
+     * 统计员工职位人数
+     */
+    @MapKey("pos")
+    List<Map<String, Object>> countEmpJobData();
+
+    /**
+     * 统计员工性别人数
+     */
+    @MapKey("name")
+    List<Map<String, Object>> countEmpGenderData();
 }

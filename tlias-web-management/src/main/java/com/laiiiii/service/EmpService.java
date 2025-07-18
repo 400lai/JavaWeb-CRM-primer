@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface EmpService {
     /**
@@ -26,4 +27,19 @@ public interface EmpService {
      * 新增 员工信息
      */
     void save(Emp emp);
+
+    /**
+     * 批量删除员工信息
+     */
+    void delete(List<Integer> ids);
+
+    /**
+     * 根据员工id查询员工信息
+     */
+    Emp getInfo(Integer id);
+
+    /**
+     * 修改员工
+     */
+    void update(Emp emp);
 }
