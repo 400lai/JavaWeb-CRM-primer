@@ -1,0 +1,82 @@
+# application-dev.yml：开发环境（本地）
+spring:
+  application:
+    name: tlias-web-management
+
+  # 配置数据库的连接信息
+  datasource:
+    url: jdbc:mysql://localhost:3306/tlias
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    druid:
+      # 连接池配置
+      initial-size: 5   # 初始化连接数
+      min-idle: 5       # 最小空闲连接数
+      max-active: 20    # 最大活跃连接数
+      max-wait: 60000   # 获取连接等待超时时间（毫秒）
+
+      # 检测配置
+      time-between-eviction-runs-millis: 60000  # 间隔多久才进行一次检测，检测需要关闭的空闲连接（毫秒）
+      min-evictable-idle-time-millis: 300000    # 一个连接在池中最小生存的时间（毫秒）
+      validation-query: SELECT 1                # 用来检测连接是否有效的 SQL，要求是一个查询语句
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+      # 是否缓存 PreparedStatement（PSCache），对 Oracle 性能提升明显，MySQL 建议关闭
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+
+      # Web监控配置
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+        slow-sql-millis: 1000   # 慢SQL判定阈值（单位：毫秒）
+        log-slow-sql: true      # 是否记录慢SQL日志
+
+      # 监控页面配置
+      stat-view-servlet:
+        enabled: true               # 是否启用监控页面
+        url-pattern: /druid/*       # 监控页面访问路径
+        reset-enable: false
+        login-username: admin
+        login-password: admin       # 生产环境请改复杂密码！
+        allow: 127.0.0.1,localhost  # 安全限制
+
+  servlet:
+    multipart:
+      # 最大单个文件大小
+      max-file-size: 10MB
+      # 最大请求大小（包括所有文件和表单数据）
+      max-request-size: 100MB
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰命名映射开关
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+  reasonable: true
+  helper-dialect: mysql
+
+#配置事务管理日志级别
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug
+  file:
+    path: ./logs  # 指定日志目录：相对路径，更安全，适合 CI/CD（会被 logback-spring.xml 中的 ${LOG_PATH} 使用）
+
+
+# 阿里云OSS对象存储服务配置
+aliyun:
+    oss:
+        endpoint: https://oss-cn-beijing.aliyuncs.com   # OSS服务接入点
+        bucketName: javaweb-primer                      # 存储空间名称
+        region: cn-beijing                              # 地域标识符
